@@ -1,182 +1,345 @@
-# Freemail - 临时邮箱服务
+# Freemail - Layanan Email Sementara / Temporary Email Service
 
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/idinging/freemail)
 
-一个基于 Cloudflare Workers + D1 + R2 构建的**开源临时邮箱服务**，支持邮件接收、发送、转发、用户管理等完整功能。
+Freemail adalah layanan email sementara open-source berbasis **Cloudflare Workers + D1 + R2**. Project ini mendukung penerimaan email, pengiriman email, penerusan email, manajemen pengguna, dan login mailbox secara terpisah.
 
-**当前版本：V5.2.0** - 引入 postal-mime 改进邮件解析，修复部分客户端中文乱码问题
+Freemail is an open-source temporary email service built with **Cloudflare Workers + D1 + R2**. It supports email receiving, email sending, forwarding, user management, and standalone mailbox login.
 
-`本邮箱服务支持接收邮件时自动创建对应的邮箱，便于api用户使用，减少worker调用，邮箱服务的转发目标邮箱地址需要在cloudflare Email Addresses中验证`
+**Versi saat ini / Current version: V5.2.0**  
+Menggunakan `postal-mime` untuk meningkatkan proses parsing email dan memperbaiki beberapa masalah encoding pada klien tertentu.  
+Uses `postal-mime` to improve email parsing and fix several client-side encoding issues.
 
-📖 **[一键部署指南](docs/yijianbushu.md)** | 🤖 **[Github Action 部署指南](docs/action-deployment.md)** | 📬 **[Resend 发件配置](docs/resend.md)** | 📚 **[API 文档](docs/api.md)**
+> Catatan: layanan ini dapat membuat mailbox secara otomatis saat menerima email. Untuk fitur forwarding, alamat tujuan harus sudah diverifikasi di Cloudflare Email Addresses.
+>
+> Note: this service can automatically create a mailbox when receiving an email. For forwarding, the destination address must be verified in Cloudflare Email Addresses.
 
-## 📸 项目展示
-### 体验地址： https://mailexhibit.dinging.top/
+📖 **[One-click Deployment Guide](docs/yijianbushu.md)** | 🤖 **[GitHub Actions Deployment](docs/action-deployment.md)** | 📬 **[Resend Sending Setup](docs/resend.md)** | 📚 **[API Documentation](docs/api.md)**
 
-### 体验账号： guest
-### 体验密码： guest
-### 页面展示
+---
 
-#### 首页
-![首页展示](./pic/light/shouye.png)
+## Bahasa Indonesia
 
-#### 所有邮箱
-![所有邮箱](./pic/light/suoyouyouxiang.png)
+### 📸 Preview Project
 
-#### 用户管理
-![用户管理](./pic/light/yonghuguanli.png)
+Demo URL: https://mailexhibit.dinging.top/
 
-#### 单个邮箱登录
-![单个邮箱登录](./pic/dange邮箱登录.png)
+Demo account:
 
-#### [浅色模式展示](docs/zhanshi-light.md) | [深色模式展示](docs/zhanshi-dark.md)
+```txt
+Username: guest
+Password: guest
+```
 
-## 功能特性
+Halaman yang tersedia:
 
-| 类别 | 特性 |
-|------|------|
-| 📧 **邮箱管理** | 随机生成临时邮箱 · 多域名支持 · 置顶/收藏 · 历史记录 · 邮箱搜索 |
-| 💌 **邮件功能** | 实时接收 · 自动刷新 · 验证码智能提取 · HTML/纯文本 · 邮件转发 |
-| ✉️ **发件支持** | Resend API 集成 · 多域名密钥 · 批量发送 · 定时发送 · 发件记录 |
-| 👥 **用户管理** | 三层权限模型 · 用户/邮箱分配 · 邮箱单点登录 · 登录权限控制 |
-| 🎨 **现代界面** | 毛玻璃效果 · 响应式设计 · 移动端适配 · 列表/卡片视图 |
-| ⚡ **技术架构** | Cloudflare Workers · D1 数据库 · R2 存储 · Email Routing |
+#### Beranda
+![Beranda](./pic/light/shouye.png)
 
-> 💡 邮箱用户自行修改密码功能默认关闭，如需开启请将 `mailbox.html` 第 77-80 行取消注释。
+#### Semua Mailbox
+![Semua Mailbox](./pic/light/suoyouyouxiang.png)
 
-## 版本历史
+#### Manajemen Pengguna
+![Manajemen Pengguna](./pic/light/yonghuguanli.png)
 
-| 版本 | 主要更新 |
-|------|----------|
-| **V5.2.0** | 引入 postal-mime 改进邮件解析 · 修复部分客户端中文乱码问题 |
-| **V5.1.0** | 邮箱别名规范化支持扩展，支持 `.` `+` `-` 三种分隔符切分 |
-| **V5.0** | 全新 UI · SVG 图标 · 深色模式 · 管理面板统计与布局优化 |
-| **V3.0** | 三层权限模型 · 用户管理后台 · R2 存储 EML |
-| **V2.0** | Resend 发件集成 · 邮箱置顶 |
-| **V1.0** | 邮箱生成 · 邮件接收 · 验证码提取 |
+#### Login Mailbox Tunggal
+![Login Mailbox Tunggal](./pic/dange邮箱登录.png)
 
-## 部署配置
+#### [Preview Mode Terang](docs/zhanshi-light.md) | [Preview Mode Gelap](docs/zhanshi-dark.md)
 
-### 快速开始
+### Fitur Utama
 
-1. **一键部署**：点击顶部按钮，按照 [部署指南](docs/yijianbushu.md) 完成配置
-2. **配置邮件路由**（收件必需）：域名 → Email Routing → Catch-all → 绑定 Worker
-3. **配置发件**（可选）：参考 [Resend 配置教程](docs/resend.md)
+| Kategori | Fitur |
+|---|---|
+| 📧 **Manajemen Mailbox** | Generate email sementara secara acak, dukungan multi-domain, pin/favorit, riwayat, pencarian mailbox |
+| 💌 **Fitur Email** | Terima email real-time, auto refresh, ekstraksi kode verifikasi, dukungan HTML/plain text, forwarding email |
+| ✉️ **Pengiriman Email** | Integrasi Resend API, API key multi-domain, bulk sending, scheduled sending, riwayat pengiriman |
+| 👥 **Manajemen Pengguna** | Model permission tiga level, alokasi user/mailbox, login mailbox tunggal, kontrol akses login |
+| 🎨 **Frontend Modern** | Efek glassmorphism, desain responsif, mobile-friendly, tampilan list/card |
+| ⚡ **Arsitektur** | Cloudflare Workers, D1 Database, R2 Storage, Email Routing |
 
-> 使用 Git 集成部署时，请在 Workers → Settings → Variables 中手动配置环境变量
+> Fitur ubah password mandiri untuk user mailbox default-nya nonaktif. Jika ingin mengaktifkannya, buka komentar pada `mailbox.html` baris 77-80.
 
-### 环境变量
+### Riwayat Versi
 
-| 变量名 | 说明 | 必需 |
-|--------|------|------|
-| TEMP_MAIL_DB | D1 数据库绑定 | 是 |
-| MAIL_EML | R2 存储桶绑定 | 是 |
-| MAIL_DOMAIN | 邮箱域名，多个用逗号分隔 | 是 |
-| ADMIN_PASSWORD | 严格管理员密码 | 是 |
-| ADMIN_NAME | 严格管理员用户名（默认 `admin`） | 否 |
-| JWT_TOKEN | JWT 签名密钥 | 是 |
-| RESEND_API_KEY | Resend 发件密钥，支持多域名配置 | 否 |
-| FORWARD_RULES | 邮件转发规则 | 否 |
+| Versi | Perubahan Utama |
+|---|---|
+| **V5.2.0** | Menambahkan `postal-mime` untuk parsing email yang lebih baik dan perbaikan encoding |
+| **V5.1.0** | Normalisasi alias mailbox diperluas, mendukung separator `.`, `+`, dan `-` |
+| **V5.0** | UI baru, ikon SVG, dark mode, optimasi statistik dan layout admin panel |
+| **V3.0** | Model permission tiga level, admin user management, penyimpanan EML di R2 |
+| **V2.0** | Integrasi Resend untuk pengiriman email dan fitur pin mailbox |
+| **V1.0** | Generate mailbox, menerima email, ekstraksi kode verifikasi |
+
+### Deployment
+
+#### Quick Start
+
+1. Klik tombol **Deploy to Cloudflare Workers** di bagian atas README.
+2. Atur **Email Routing** di Cloudflare: Domain → Email Routing → Catch-all → hubungkan ke Worker.
+3. Jika ingin mengaktifkan pengiriman email, ikuti dokumentasi **Resend Sending Setup**.
+
+> Jika memakai deployment via Git integration, atur environment variables secara manual di Workers → Settings → Variables.
+
+### Environment Variables
+
+| Variable | Deskripsi | Wajib |
+|---|---|---|
+| TEMP_MAIL_DB | Binding D1 Database | Ya |
+| MAIL_EML | Binding R2 Bucket | Ya |
+| MAIL_DOMAIN | Domain email, bisa lebih dari satu dengan pemisah koma | Ya |
+| ADMIN_PASSWORD | Password admin utama | Ya |
+| ADMIN_NAME | Username admin utama, default `admin` | Tidak |
+| JWT_TOKEN | Secret untuk JWT signing | Ya |
+| RESEND_API_KEY | API key Resend untuk pengiriman email, mendukung konfigurasi multi-domain | Tidak |
+| FORWARD_RULES | Aturan forwarding email | Tidak |
 
 <details>
-<summary><strong>RESEND_API_KEY 配置格式</strong></summary>
+<summary><strong>Format RESEND_API_KEY</strong></summary>
 
 ```bash
-# 单密钥（向后兼容）
+# Single key, backward compatible
 RESEND_API_KEY="re_xxxxxxxxxxxxxxxxxxxxxxxx"
 
-# 键值对格式（推荐）
+# Key-value format, recommended
 RESEND_API_KEY="domain1.com=re_key1,domain2.com=re_key2"
 
-# JSON格式
+# JSON format
 RESEND_API_KEY='{"domain1.com":"re_key1","domain2.com":"re_key2"}'
 ```
 
-系统会根据发件人域名自动选择对应的 API 密钥。
+Sistem akan memilih API key berdasarkan domain pengirim.
 </details>
 
 <details>
-<summary><strong>FORWARD_RULES 配置格式</strong></summary>
+<summary><strong>Format FORWARD_RULES</strong></summary>
 
-规则按前缀匹配，`*` 为兜底规则。
+Rule dicocokkan berdasarkan prefix. Karakter `*` digunakan sebagai fallback/default rule.
 
-⚠️ **重要**：转发目标邮箱必须在 Cloudflare 控制台中验证后才能使用：
-1. 进入 Cloudflare 控制台 → 域名 → 电子邮件 → 电子邮件路由
-2. 切换到「目标地址」选项卡
-3. 点击「添加目标地址」，输入转发目标邮箱
-4. 前往目标邮箱收取验证邮件并点击确认链接
+Penting: alamat tujuan forwarding harus diverifikasi di Cloudflare sebelum dapat digunakan.
 
-![转发目标地址验证](pic/resend/zhuanfa.png)
+1. Buka Cloudflare Dashboard → Domain → Email → Email Routing.
+2. Masuk ke tab **Destination addresses**.
+3. Klik **Add destination address**, lalu masukkan email tujuan forwarding.
+4. Buka email tujuan, lalu klik link verifikasi dari Cloudflare.
+
+![Verifikasi alamat tujuan forwarding](pic/resend/zhuanfa.png)
 
 ```bash
-# 键值对格式
+# Key-value format
 FORWARD_RULES="vip=a@example.com,news=b@example.com,*=fallback@example.com"
 
-# JSON格式
+# JSON format
 FORWARD_RULES='[{"prefix":"vip","email":"a@example.com"},{"prefix":"*","email":"fallback@example.com"}]'
 
-# 禁用转发
-FORWARD_RULES="" 或 "disabled" 或 "none"
+# Disable forwarding
+FORWARD_RULES="" atau "disabled" atau "none"
 ```
 </details>
 
-## 故障排除
+### Troubleshooting
 
 <details>
-<summary><strong>常见问题</strong></summary>
+<summary><strong>Masalah umum</strong></summary>
 
-1. **邮件接收不到**：检查 Email Routing 配置、MX 记录、MAIL_DOMAIN 变量
-2. **数据库连接错误**：确认 D1 绑定名为 `TEMP_MAIL_DB`，检查 database_id
-3. **登录问题**：确认 ADMIN_PASSWORD 和 JWT_TOKEN 已设置，清除浏览器缓存
-4. **界面显示异常**：检查静态资源路径，查看浏览器控制台错误
+1. **Email tidak masuk**: cek konfigurasi Email Routing, MX record, dan variable `MAIL_DOMAIN`.
+2. **Database error**: pastikan binding D1 bernama `TEMP_MAIL_DB` dan `database_id` benar.
+3. **Masalah login**: pastikan `ADMIN_PASSWORD` dan `JWT_TOKEN` sudah diatur, lalu bersihkan cache browser.
+4. **Tampilan error**: cek path static assets dan error di browser console.
 </details>
 
 <details>
-<summary><strong>调试技巧</strong></summary>
+<summary><strong>Debugging</strong></summary>
 
 ```bash
-# 本地调试
+# Local development
 wrangler dev
 
-# 查看实时日志
+# Realtime logs
 wrangler tail
 
-# 检查数据库
+# Check database
 wrangler d1 execute TEMP_MAIL_DB --command "SELECT * FROM mailboxes LIMIT 10"
 ```
 </details>
 
-## 注意事项
+### Catatan Penting
 
-- **静态资源缓存**：更新后在 Cloudflare 控制台 Purge Everything，浏览器强制刷新
-- **R2/D1 费用**：有免费额度限制，建议定期清理过期邮件
-- **安全**：生产环境务必修改默认的 `ADMIN_PASSWORD` 和 `JWT_TOKEN`
+- **Cache static assets**: setelah update, jalankan Purge Everything di Cloudflare dan lakukan hard refresh di browser.
+- **Biaya R2/D1**: Cloudflare memiliki free tier, tetapi tetap disarankan membersihkan email lama secara berkala.
+- **Keamanan**: untuk production, wajib ubah default `ADMIN_PASSWORD` dan `JWT_TOKEN`.
 
-## 自动部署
+### Auto Deployment
 
-本项目支持 GitHub Actions 自动部署到 Cloudflare Workers。详细配置说明请参考 [自动部署指南](docs/action-deployment.md)。
+Project ini mendukung deployment otomatis ke Cloudflare Workers menggunakan GitHub Actions. Lihat panduan lengkap di [GitHub Actions Deployment](docs/action-deployment.md).
 
-## 感谢贡献者
+---
 
-感谢 [sarsanta](https://github.com/sarsanta) 贡献的 GitHub Actions 自动部署功能！
+## English
+
+### 📸 Project Preview
+
+Demo URL: https://mailexhibit.dinging.top/
+
+Demo account:
+
+```txt
+Username: guest
+Password: guest
+```
+
+Available pages:
+
+#### Home
+![Home](./pic/light/shouye.png)
+
+#### All Mailboxes
+![All Mailboxes](./pic/light/suoyouyouxiang.png)
+
+#### User Management
+![User Management](./pic/light/yonghuguanli.png)
+
+#### Single Mailbox Login
+![Single Mailbox Login](./pic/dange邮箱登录.png)
+
+#### [Light Mode Preview](docs/zhanshi-light.md) | [Dark Mode Preview](docs/zhanshi-dark.md)
+
+### Key Features
+
+| Category | Features |
+|---|---|
+| 📧 **Mailbox Management** | Random temporary mailbox generation, multi-domain support, pin/favorite, history, mailbox search |
+| 💌 **Email Features** | Real-time receiving, auto refresh, verification code extraction, HTML/plain text support, email forwarding |
+| ✉️ **Sending Support** | Resend API integration, multi-domain API keys, bulk sending, scheduled sending, sending history |
+| 👥 **User Management** | Three-level permission model, user/mailbox assignment, standalone mailbox login, login access control |
+| 🎨 **Modern Frontend** | Glassmorphism effect, responsive design, mobile-friendly layout, list/card views |
+| ⚡ **Architecture** | Cloudflare Workers, D1 Database, R2 Storage, Email Routing |
+
+> Self-service password change for mailbox users is disabled by default. To enable it, uncomment lines 77-80 in `mailbox.html`.
+
+### Version History
+
+| Version | Main Updates |
+|---|---|
+| **V5.2.0** | Added `postal-mime` for better email parsing and encoding fixes |
+| **V5.1.0** | Extended mailbox alias normalization with `.`, `+`, and `-` separators |
+| **V5.0** | New UI, SVG icons, dark mode, admin panel statistics and layout improvements |
+| **V3.0** | Three-level permission model, user management backend, EML storage in R2 |
+| **V2.0** | Resend sending integration and mailbox pinning |
+| **V1.0** | Mailbox generation, email receiving, verification code extraction |
+
+### Deployment
+
+#### Quick Start
+
+1. Click the **Deploy to Cloudflare Workers** button at the top of this README.
+2. Configure **Email Routing** in Cloudflare: Domain → Email Routing → Catch-all → bind it to the Worker.
+3. To enable email sending, follow the **Resend Sending Setup** documentation.
+
+> When deploying through Git integration, manually configure environment variables in Workers → Settings → Variables.
+
+### Environment Variables
+
+| Variable | Description | Required |
+|---|---|---|
+| TEMP_MAIL_DB | D1 Database binding | Yes |
+| MAIL_EML | R2 Bucket binding | Yes |
+| MAIL_DOMAIN | Email domain, multiple domains can be separated by commas | Yes |
+| ADMIN_PASSWORD | Main administrator password | Yes |
+| ADMIN_NAME | Main administrator username, default `admin` | No |
+| JWT_TOKEN | Secret used for JWT signing | Yes |
+| RESEND_API_KEY | Resend API key for sending emails, supports multi-domain configuration | No |
+| FORWARD_RULES | Email forwarding rules | No |
+
+<details>
+<summary><strong>RESEND_API_KEY Format</strong></summary>
+
+```bash
+# Single key, backward compatible
+RESEND_API_KEY="re_xxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Key-value format, recommended
+RESEND_API_KEY="domain1.com=re_key1,domain2.com=re_key2"
+
+# JSON format
+RESEND_API_KEY='{"domain1.com":"re_key1","domain2.com":"re_key2"}'
+```
+
+The system automatically selects the API key based on the sender domain.
+</details>
+
+<details>
+<summary><strong>FORWARD_RULES Format</strong></summary>
+
+Rules are matched by prefix. The `*` character is used as the fallback/default rule.
+
+Important: forwarding destination addresses must be verified in Cloudflare before they can be used.
+
+1. Open Cloudflare Dashboard → Domain → Email → Email Routing.
+2. Go to the **Destination addresses** tab.
+3. Click **Add destination address**, then enter the forwarding destination email.
+4. Open the destination inbox and confirm the verification email from Cloudflare.
+
+![Forwarding destination verification](pic/resend/zhuanfa.png)
+
+```bash
+# Key-value format
+FORWARD_RULES="vip=a@example.com,news=b@example.com,*=fallback@example.com"
+
+# JSON format
+FORWARD_RULES='[{"prefix":"vip","email":"a@example.com"},{"prefix":"*","email":"fallback@example.com"}]'
+
+# Disable forwarding
+FORWARD_RULES="" or "disabled" or "none"
+```
+</details>
+
+### Troubleshooting
+
+<details>
+<summary><strong>Common issues</strong></summary>
+
+1. **Emails are not received**: check Email Routing, MX records, and the `MAIL_DOMAIN` variable.
+2. **Database connection error**: make sure the D1 binding is named `TEMP_MAIL_DB` and the `database_id` is correct.
+3. **Login issue**: make sure `ADMIN_PASSWORD` and `JWT_TOKEN` are configured, then clear the browser cache.
+4. **Frontend display issue**: check static asset paths and browser console errors.
+</details>
+
+<details>
+<summary><strong>Debugging</strong></summary>
+
+```bash
+# Local development
+wrangler dev
+
+# Realtime logs
+wrangler tail
+
+# Check database
+wrangler d1 execute TEMP_MAIL_DB --command "SELECT * FROM mailboxes LIMIT 10"
+```
+</details>
+
+### Important Notes
+
+- **Static asset cache**: after updating, run Purge Everything in Cloudflare and hard-refresh your browser.
+- **R2/D1 cost**: Cloudflare has free tiers, but it is recommended to clean old emails regularly.
+- **Security**: for production, always change the default `ADMIN_PASSWORD` and `JWT_TOKEN`.
+
+### Auto Deployment
+
+This project supports automatic deployment to Cloudflare Workers using GitHub Actions. See [GitHub Actions Deployment](docs/action-deployment.md) for the full guide.
+
+---
+
+## Credits
+
+Thanks to [sarsanta](https://github.com/sarsanta) for contributing the GitHub Actions deployment workflow.
 
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=idinging/freemail&type=Date)](https://www.star-history.com/#idinging/freemail&Date)
 
-## 联系方式
-
-- 微信：`iYear1213`
-
-## Buy me a coffee
-
-如果你觉得本项目对你有帮助，欢迎赞赏支持：
-
-<p align="left">
-  <img src="pic/alipay.jpg" alt="支付宝赞赏码" height="400" />
-  <img src="pic/weichat.jpg" alt="微信赞赏码" height="400" />
-</p>
-
-## 许可证
+## License
 
 Apache-2.0 license
