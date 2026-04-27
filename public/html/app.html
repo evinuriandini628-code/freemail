@@ -1,89 +1,36 @@
-<div class="topbar">
-  <div class="brand">
-    <span class="brand-icon"></span>
-    <span class="brand-text">MatMailer</span>
-  </div>
-  <div id="role-badge" class="role-badge" title="Selamat datang"></div>
-  <div class="nav-actions">
-    <a id="admin" class="btn btn-ghost" href="/templates/loading.html?redirect=%2Fadmin.html&status=Membuka%20halaman%20pengguna..." title="Pengguna" style="display:none">
-      <span class="btn-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-wrench"/></svg></span>
-      <span class="btn-text">Pengguna</span>
-    </a>
-    <a id="all-mailboxes" class="btn btn-ghost" href="/templates/loading.html?redirect=%2Fhtml%2Fmailboxes.html&status=Membuka%20semua%20mailbox..." title="Semua Mailbox" style="display:none">
-      <span class="btn-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-package"/></svg></span>
-      <span class="btn-text">Semua Mailbox</span>
-    </a>
-    <button id="logout" class="btn btn-secondary" title="Keluar">
-      <span class="btn-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-logout"/></svg></span>
-      <span class="btn-text">Keluar</span>
-    </button>
-  </div>
+<div class="mm-app">
+  <header class="mm-header">
+    <div class="mm-logo">M</div>
+    <div class="mm-title">MatMailer</div>
+    <div class="mm-user" id="role-badge"></div>
+    <button id="logout" class="mm-logout">Keluar</button>
+  </header>
+
+  <main class="mm-container">
+    <section class="mm-card">
+      <h2>Mailbox Aktif</h2>
+      <div id="email" class="mm-email">
+        <span id="email-text">Belum ada mailbox</span>
+      </div>
+
+      <div id="email-actions" class="mm-actions" style="display:none">
+        <button id="copy">Salin</button>
+        <button id="refresh">Refresh</button>
+        <button id="clear">Kosongkan</button>
+      </div>
+
+      <div class="mm-create">
+        <select id="domain-select"></select>
+        <input id="len-range" type="range" min="8" max="30" value="10" />
+        <button id="gen">Buat Email</button>
+      </div>
+    </section>
+
+    <section class="mm-card" id="list-card" style="display:none">
+      <h2>Kotak Masuk</h2>
+      <div id="list"></div>
+    </section>
+  </main>
 </div>
-<div class="toast" id="toast"></div>
-<div class="container">
-  <div class="sidebar">
-    <div class="sidebar-header">
-      <h3><span class="sidebar-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-inbox"/></svg></span><span class="sidebar-title">Semua Mailbox</span></h3>
-      <div class="sidebar-header-actions">
-        <span id="quota" class="quota-display"></span>
-        <button id="sidebar-toggle" class="sidebar-toggle-btn" title="Ciutkan sidebar" aria-label="Ciutkan sidebar"><span id="sidebar-toggle-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-chevron-left"/></svg></span></button>
-        <button id="mb-toggle" class="sidebar-toggle-btn" title="Buka/tutup daftar mailbox" aria-label="Buka atau tutup daftar mailbox"><span id="mb-toggle-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-chevron-down"/></svg></span></button>
-      </div>
-    </div>
-    <div class="sidebar-search"><input id="mb-search" class="input sidebar-search-input" placeholder="Cari mailbox..." aria-label="Cari mailbox" /></div>
-    <div id="mb-list"></div>
-    <div id="mb-loading" style="margin-top:12px"></div>
-    <div id="mb-pager" class="pager" style="display:none;margin-top:16px">
-      <button id="mb-prev" class="btn btn-ghost btn-sm">Sebelumnya</button>
-      <span id="mb-page-info" class="muted" style="min-width:100px;text-align:center"></span>
-      <button id="mb-next" class="btn btn-ghost btn-sm">Berikutnya</button>
-    </div>
-  </div>
-  <div class="main">
-    <div class="card generate-card">
-      <h2><span class="card-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-sparkles"/></svg></span>Dashboard MatMailer</h2>
-      <p class="matmailer-subtitle">Kelola inbox email sementara Anda dengan mudah, cepat, dan aman.</p>
-      <div class="mailbox-layout">
-        <div class="mailbox-display-section">
-          <div class="mailbox-display-content">
-            <div class="section-header"><span class="section-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-mail"/></svg></span><span class="section-title">Mailbox Aktif</span></div>
-            <div id="email" class="email-display">
-              <span id="email-text" class="email-text"><span class="placeholder-text">Buat atau pilih mailbox untuk melihat inbox</span></span>
-              <div id="custom-overlay" class="custom-overlay" style="display:none">
-                <input id="custom-local-overlay" class="input custom-input" type="text" placeholder="nama mailbox" aria-label="Nama mailbox custom" />
-                <button id="create-custom-overlay" class="btn btn-primary btn-sm">Buat</button>
-              </div>
-            </div>
-          </div>
-          <div class="mailbox-actions" id="email-actions" style="display:none">
-            <button id="copy" class="btn btn-secondary" style="width:100%" aria-label="Salin alamat mailbox"><span class="btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-copy"/></svg></span><span>Salin Alamat</span></button>
-            <button id="clear" class="btn btn-danger" style="width:100%" aria-label="Kosongkan email"><span class="btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-trash"/></svg></span><span>Kosongkan Inbox</span></button>
-            <button id="refresh" class="btn btn-ghost" style="width:100%" aria-label="Segarkan inbox"><span class="btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-refresh"/></svg></span><span>Segarkan</span></button>
-            <button id="forward-setting" class="btn btn-ghost" style="width:100%" aria-label="Pengaturan forward"><span class="btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-forward"/></svg></span><span>Forwarding</span></button>
-            <button id="toggle-favorite" class="btn btn-ghost" style="width:100%" aria-label="Favoritkan mailbox"><span class="btn-icon" id="favorite-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-star-empty"/></svg></span><span id="favorite-text">Favorit</span></button>
-          </div>
-        </div>
-        <div class="mailbox-config-section">
-          <div class="section-header"><span class="section-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-settings"/></svg></span><span class="section-title">Buat Mailbox</span><button id="config-toggle" class="sidebar-toggle-btn" title="Buka/tutup konfigurasi" aria-label="Buka atau tutup konfigurasi"><span id="config-toggle-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-chevron-down"/></svg></span></button></div>
-          <div class="config-form">
-            <div class="config-item"><label class="config-label" for="domain-select"><span class="label-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-globe"/></svg></span><span>Domain</span></label><select id="domain-select" class="select config-select" aria-label="Pilih domain mailbox"></select></div>
-            <div class="config-item"><label class="config-label" for="len-range"><span class="label-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-ruler"/></svg></span><span>Panjang nama</span></label><div class="range-container"><input id="len-range" class="range" type="range" min="8" max="30" step="1" value="8" aria-label="Panjang nama mailbox" /><div class="range-display"><span id="len-val" class="len-value">8</span><span class="len-unit">karakter</span></div></div></div>
-            <div class="generate-action"><div class="generate-buttons" style="display:flex;gap:8px;margin-bottom:8px;width:100%;"><button id="gen" class="btn btn-generate" style="flex:1;" aria-label="Buat mailbox random"><span class="btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-dice"/></svg></span><span>Random</span></button><button id="gen-name" class="btn btn-primary" style="flex:1;" title="Buat dari nama acak" aria-label="Buat mailbox dari nama acak"><span class="btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-user"/></svg></span><span>Nama Acak</span></button></div><button id="toggle-custom" class="btn btn-secondary btn-sm" style="width:100%;" title="Mailbox custom" aria-label="Buat mailbox custom">Buat Custom</button></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card inbox-card" id="list-card" style="display:none">
-      <div class="listcard-header">
-        <h2 class="listcard-title"><span class="card-icon" id="box-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-inbox"/></svg></span><span id="box-title">Kotak Masuk</span></h2>
-        <div class="view-switch"><button id="tab-inbox" class="seg-btn" aria-pressed="true">Kotak Masuk</button><button id="tab-sent" class="seg-btn" aria-pressed="false">Terkirim</button></div>
-        <div id="list-status" class="loading-indicator" style="pointer-events:none" role="status" aria-live="polite"><div id="list-spinner" class="spinner"></div><span id="list-status-text">Memuat...</span></div>
-      </div>
-      <div class="list-viewport" style="position:relative;contain:layout paint;isolation:isolate;"><div id="list" class="list"></div><div id="list-pager" class="pager" style="display:none"><button id="prev-page" class="btn btn-ghost btn-sm">Sebelumnya</button><span id="page-info" class="muted" style="min-width:100px;text-align:center"></span><button id="next-page" class="btn btn-ghost btn-sm">Berikutnya</button></div></div>
-    </div>
-  </div>
-</div>
-<div id="footer-slot"></div>
-<div class="modal" id="email-modal"><div class="modal-card"><div class="modal-header"><div id="modal-subject"><span class="modal-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-mail"/></svg></span><span>Detail Email</span></div><button id="modal-close" class="close" aria-label="Tutup"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-x"/></svg></button></div><div class="modal-body"><div id="modal-content"></div></div></div></div>
-<div class="modal" id="confirm-modal"><div class="modal-card confirm-card"><div class="modal-header confirm-header"><div><span class="modal-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-alert"/></svg></span><span>Konfirmasi</span></div><button id="confirm-close" class="close" aria-label="Tutup"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="/icons/sprites.svg#icon-x"/></svg></button></div><div class="modal-body confirm-body"><div id="confirm-message" class="confirm-message"></div><div class="confirm-actions"><button id="confirm-cancel" class="btn btn-secondary">Batal</button><button id="confirm-ok" class="btn btn-danger">Ya, lanjutkan</button></div></div></div></div>
-<div class="modal" id="compose-modal" style="display:none"></div>
+
+<div id="toast"></div>
