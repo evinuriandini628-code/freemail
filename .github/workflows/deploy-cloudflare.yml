@@ -2,11 +2,12 @@ name: 🚀 Deploy freemail to Cloudflare Workers
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
     paths:
       - "src/**"
       - "public/**"
       - "wrangler.toml"
+      - ".github/workflows/deploy-cloudflare.yml"
   workflow_dispatch:
 
 jobs:
