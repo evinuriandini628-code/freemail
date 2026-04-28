@@ -197,3 +197,112 @@ body::after{background:linear-gradient(180deg,rgba(255,255,255,.58),rgba(255,255
   .email-meta,.email-subject,.email-preview{max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;}
   #footer-slot::after{padding:8px 0 24px!important;font-size:12px!important;}
 }
+/* === MATMAILER CLEAN UI V2 === */
+
+.mm-shell {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f9ff;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* SIDEBAR */
+.mm-sidebar {
+  width: 240px;
+  background: #fff;
+  border-right: 1px solid #e5efff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mm-brand {
+  font-weight: 800;
+  font-size: 20px;
+  color: #0b6ff6;
+}
+
+.mm-nav a {
+  display: block;
+  padding: 10px;
+  border-radius: 10px;
+  color: #333;
+  text-decoration: none;
+}
+
+.mm-nav a.active,
+.mm-nav a:hover {
+  background: #eaf2ff;
+  color: #0b6ff6;
+}
+
+/* CONTENT */
+.mm-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* TOP */
+.mm-topbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+/* CARD */
+.mm-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+/* EMAIL DISPLAY */
+.mm-email-display {
+  background: #f1f6ff;
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+/* BUTTON */
+.mm-btn {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.mm-btn.primary {
+  background: #0b6ff6;
+  color: #fff;
+}
+
+.mm-btn.soft {
+  background: #eef4ff;
+  color: #0b6ff6;
+}
+
+.mm-btn.danger {
+  background: #ffecec;
+  color: red;
+}
+
+/* GRID */
+.mm-grid {
+  display: grid;
+  gap: 16px;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  .mm-shell {
+    flex-direction: column;
+  }
+  .mm-sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+  }
+}
