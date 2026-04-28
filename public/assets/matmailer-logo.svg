@@ -1,0 +1,22 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="38" y1="34" x2="220" y2="224" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#33C3FF"/>
+      <stop offset="0.56" stop-color="#0B6FF6"/>
+      <stop offset="1" stop-color="#073B9E"/>
+    </linearGradient>
+    <linearGradient id="mail" x1="52" y1="70" x2="206" y2="190" gradientUnits="userSpaceOnUse">
+      <stop stop-color="white"/>
+      <stop offset="1" stop-color="#EAF6FF"/>
+    </linearGradient>
+    <filter id="shadow" x="10" y="10" width="236" height="236" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#0B6FF6" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <rect x="28" y="28" width="200" height="200" rx="52" fill="url(#bg)" filter="url(#shadow)"/>
+  <path d="M62 86C62 77.1634 69.1634 70 78 70H178C186.837 70 194 77.1634 194 86V170C194 178.837 186.837 186 178 186H78C69.1634 186 62 178.837 62 170V86Z" fill="url(#mail)"/>
+  <path d="M68 82L128 130L188 82" stroke="#0B6FF6" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M69 180L114 140" stroke="#33A9FF" stroke-width="10" stroke-linecap="round"/>
+  <path d="M187 180L142 140" stroke="#33A9FF" stroke-width="10" stroke-linecap="round"/>
+  <path d="M96 160V104L128 137L160 104V160" stroke="#0B1B3A" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
