@@ -1,36 +1,168 @@
-<div class="mm-app">
-  <header class="mm-header">
-    <div class="mm-logo">M</div>
-    <div class="mm-title">MatMailer</div>
-    <div class="mm-user" id="role-badge"></div>
+<div class="mm-shell">
+  <aside class="mm-sidebar">
+    <div class="mm-brand">
+      <span class="mm-logo">M</span>
+      <span>Mat<span>Mailer</span></span>
+    </div>
+    <nav class="mm-nav">
+      <a class="active" href="/">Beranda</a>
+      <a href="#inbox">Kotak Masuk</a>
+      <a id="all-mailboxes" href="/templates/loading.html?redirect=%2Fhtml%2Fmailboxes.html&status=Membuka%20semua%20mailbox..." style="display:none">Semua Mailbox</a>
+      <a id="admin" href="/templates/loading.html?redirect=%2Fadmin.html&status=Membuka%20halaman%20pengguna..." style="display:none">Pengguna</a>
+      <a href="#settings">Pengaturan</a>
+    </nav>
+    <div class="mm-sidebar-note">Layanan inbox email sementara yang cepat, aman, dan mudah.</div>
     <button id="logout" class="mm-logout">Keluar</button>
-  </header>
+  </aside>
 
-  <main class="mm-container">
-    <section class="mm-card">
-      <h2>Mailbox Aktif</h2>
-      <div id="email" class="mm-email">
-        <span id="email-text">Belum ada mailbox</span>
+  <section class="mm-content">
+    <header class="mm-topbar">
+      <div>
+        <h1>Selamat datang di MatMailer</h1>
+        <p>Kelola email sementara Anda dengan mudah dan aman.</p>
       </div>
+      <div id="role-badge" class="role-badge"></div>
+    </header>
 
-      <div id="email-actions" class="mm-actions" style="display:none">
-        <button id="copy">Salin</button>
-        <button id="refresh">Refresh</button>
-        <button id="clear">Kosongkan</button>
-      </div>
+    <main class="mm-grid">
+      <section class="mm-card mm-active-card generate-card">
+        <div class="mm-card-title">
+          <div>
+            <h2>Mailbox Aktif</h2>
+            <p>Alamat email sementara Anda</p>
+          </div>
+          <span class="mm-status">Aktif</span>
+        </div>
 
-      <div class="mm-create">
-        <select id="domain-select"></select>
-        <input id="len-range" type="range" min="8" max="30" value="10" />
-        <button id="gen">Buat Email</button>
-      </div>
-    </section>
+        <div id="email" class="email-display mm-email-display">
+          <span id="email-text" class="email-text"><span class="placeholder-text">Belum ada mailbox dipilih</span></span>
+          <div id="custom-overlay" class="custom-overlay" style="display:none">
+            <input id="custom-local-overlay" class="input custom-input" type="text" placeholder="nama mailbox" aria-label="Nama mailbox custom" />
+            <button id="create-custom-overlay" class="btn btn-primary btn-sm">Buat</button>
+          </div>
+        </div>
 
-    <section class="mm-card" id="list-card" style="display:none">
-      <h2>Kotak Masuk</h2>
-      <div id="list"></div>
-    </section>
-  </main>
+        <div id="email-actions" class="mailbox-actions mm-actions" style="display:none">
+          <button id="copy" class="mm-btn primary">Salin Email</button>
+          <button id="refresh" class="mm-btn soft">Refresh</button>
+          <button id="clear" class="mm-btn danger">Hapus Inbox</button>
+          <button id="toggle-favorite" class="mm-btn soft"><span id="favorite-icon" hidden></span><span id="favorite-text">Favorit</span></button>
+          <button id="forward-setting" class="mm-btn ghost mm-hidden-feature">Forwarding</button>
+          <button id="compose" class="mm-hidden-feature" hidden></button>
+        </div>
+      </section>
+
+      <section class="mm-card mm-create-card">
+        <h2>Buat Email Baru</h2>
+        <p>Buat alamat email sementara baru dengan sekali klik.</p>
+        <div class="mm-create-controls">
+          <select id="domain-select" class="select config-select"></select>
+          <div class="mm-range-row">
+            <input id="len-range" class="range" type="range" min="8" max="30" step="1" value="10" />
+            <span><b id="len-val">10</b> karakter</span>
+          </div>
+        </div>
+        <div class="mm-create-actions generate-buttons">
+          <button id="gen" class="mm-btn primary">+ Buat Email Baru</button>
+          <button id="gen-name" class="mm-btn soft">Nama Acak</button>
+          <button id="toggle-custom" class="mm-btn soft">Custom</button>
+        </div>
+      </section>
+
+      <section class="mm-stats">
+        <div class="mm-stat"><span>✉</span><b id="quota">0</b><small>Total Mailbox</small></div>
+        <div class="mm-stat"><span>📥</span><b>Inbox</b><small>Email masuk aktif</small></div>
+        <div class="mm-stat"><span>⚡</span><b>Realtime</b><small>Auto refresh</small></div>
+        <div class="mm-stat"><span>⭐</span><b>Favorit</b><small>Mailbox pilihan</small></div>
+      </section>
+
+      <section class="mm-card mm-inbox inbox-card" id="list-card" style="display:none">
+        <div class="listcard-header mm-inbox-head">
+          <div>
+            <h2 class="listcard-title"><span id="box-icon" hidden></span><span id="box-title">Kotak Masuk</span></h2>
+            <p>Email terbaru dari mailbox aktif.</p>
+          </div>
+          <div id="list-status" class="loading-indicator" role="status" aria-live="polite">
+            <div id="list-spinner" class="spinner"></div>
+            <span id="list-status-text">Memuat...</span>
+          </div>
+          <div class="view-switch" hidden>
+            <button id="tab-inbox" class="seg-btn">Kotak Masuk</button>
+            <button id="tab-sent" class="seg-btn">Terkirim</button>
+          </div>
+        </div>
+        <div class="list-viewport">
+          <div id="list" class="list"></div>
+          <div id="list-pager" class="pager" style="display:none">
+            <button id="prev-page" class="mm-btn soft">Sebelumnya</button>
+            <span id="page-info" class="muted"></span>
+            <button id="next-page" class="mm-btn soft">Berikutnya</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="mm-card mm-mailboxes sidebar">
+        <div class="sidebar-header mm-card-title">
+          <div>
+            <h2><span class="sidebar-title">Semua Mailbox</span></h2>
+            <p>Cari dan pilih mailbox yang sudah dibuat.</p>
+          </div>
+          <div class="sidebar-header-actions" hidden>
+            <button id="sidebar-toggle" class="sidebar-toggle-btn"><span id="sidebar-toggle-icon">‹</span></button>
+            <button id="mb-toggle" class="sidebar-toggle-btn"><span id="mb-toggle-icon">⌄</span></button>
+          </div>
+        </div>
+        <div class="sidebar-search">
+          <input id="mb-search" class="input sidebar-search-input" placeholder="Cari mailbox..." />
+        </div>
+        <div id="mb-list" class="mm-mailbox-list"></div>
+        <div id="mb-loading"></div>
+        <div id="mb-pager" class="pager" style="display:none">
+          <button id="mb-prev" class="mm-btn soft">Sebelumnya</button>
+          <span id="mb-page-info" class="muted"></span>
+          <button id="mb-next" class="mm-btn soft">Berikutnya</button>
+        </div>
+      </aside>
+    </main>
+
+    <footer id="footer-slot" class="mm-footer">💙 MatMailer - Layanan inbox email sementara</footer>
+  </section>
 </div>
 
-<div id="toast"></div>
+<div class="toast" id="toast"></div>
+
+<div class="modal" id="email-modal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div id="modal-subject">Detail Email</div>
+      <button id="modal-close" class="close">×</button>
+    </div>
+    <div class="modal-body"><div id="modal-content"></div></div>
+  </div>
+</div>
+
+<div class="modal" id="confirm-modal">
+  <div class="modal-card confirm-card">
+    <div class="modal-header confirm-header">
+      <div>Konfirmasi</div>
+      <button id="confirm-close" class="close">×</button>
+    </div>
+    <div class="modal-body confirm-body">
+      <div id="confirm-message" class="confirm-message"></div>
+      <div class="confirm-actions">
+        <button id="confirm-cancel" class="mm-btn soft">Batal</button>
+        <button id="confirm-ok" class="mm-btn danger">Ya, lanjutkan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="compose-modal" style="display:none">
+  <button id="compose-close" hidden></button>
+  <input id="compose-to" hidden />
+  <input id="compose-subject" hidden />
+  <textarea id="compose-body" hidden></textarea>
+  <input id="compose-from-name" hidden />
+  <button id="compose-cancel" hidden></button>
+  <button id="compose-send" hidden></button>
+</div>
